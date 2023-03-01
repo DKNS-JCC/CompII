@@ -1,0 +1,34 @@
+XH2
+H 3 areas A global symbols 2 banks 1 modes
+G 00 00 80 81 82 83 84 85 86 87 88 89 8A 8B 8C 8D 8E 8F
+B _CSEG base 0 size 0 map 0 flags 0
+B _DSEG base 0 size 0 map 0 flags 4 fsfx _DS
+S pantalla DefFF00
+S teclado DefFF02
+S .__.ABS. Def0000
+S fin DefFF01
+A _CODE size 0 flags CC80 bank 0
+A _DATA size 0 flags CCC0 bank 1
+A PROG size 0 flags D0C
+S dos Def0102
+S uno Def0100
+S programa Def0107
+S acabar Def011B
+S suma1 Def0103
+S suma2 Def0105
+T 01 00
+R 00 00 00 02
+T 01 00 01 A3 B1 00 00 00 00
+R 00 00 00 02
+T 01 07
+R 00 00 00 02
+T 01 07 BE 01 00 F6 01 02 3A FD
+R 00 00 00 02 01 03 00 02 01 06 00 02
+T 01 0F 01 03 F6 01 02 1D F3
+R 00 00 00 02 01 02 00 02 01 05 00 02
+T 01 16 01 00 FD 01 05 4F B7 FF 01
+R 00 00 00 02 01 02 00 02 01 05 00 02
+T FF FE
+R 00 00 00 02
+T FF FE 01 07
+R 00 00 00 02 01 02 00 02

@@ -1,0 +1,56 @@
+ASxxxx Assembler V05.00  (Motorola 6809), page 1.
+Hexidecimal [16-Bits]
+
+
+
+                              1         	.area PROG (ABS)
+                              2 
+                              3 
+                     FF01     4 fin     	.equ 	0xFF01
+                     FF02     5 teclado		.equ		0xFF02
+                     FF00     6 pantalla 	.equ 	0xFF00
+                              7          			
+   0100                       8         	.org 	0x100
+   0100 21 90                 9 sumando1:	.word	0x2190	;|0x21|0x90|
+   0102 77 77                10 sumando2:	.word	0x7777	;|0x77|0x77|
+   0104 00 00                11 suma1:		.word	0
+   0106 00 00                12 suma2:		.word	0	
+                             13         	.globl 	programa
+                             14 
+                             15 			; Comienzo del programa
+   0108                      16 programa:	
+                             17 		; Suma con registro D
+   0108 FC 01 00      [ 6]   18 		ldd		sumando1
+   010B F3 01 02      [ 7]   19 		addd	sumando2
+   010E FD 01 04      [ 6]   20 		std		suma1
+                             21 
+                             22 		;Suma con registro A
+   0111 B6 01 01      [ 5]   23 		lda 	sumando1+1	;90
+   0114 BB 01 03      [ 5]   24 		adda	sumando2+1	;+77
+   0117 B7 01 07      [ 5]   25 		sta		suma2+1		;almacenar en A
+   011A B6 01 00      [ 5]   26 		lda		sumando1	;21
+   011D B9 01 02      [ 5]   27 		adca 	sumando2	;+77
+   0120 B7 01 06      [ 5]   28 		sta 	suma2		;almacenar en A
+ASxxxx Assembler V05.00  (Motorola 6809), page 2.
+Hexidecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.       =   2710 L   |     .__.ABS.       =   0000 G
+    .__.CPU.       =   0000 L   |     .__.H$L.       =   0001 L
+    fin            =   FF01 G   |     pantalla       =   FF00 G
+  2 programa           0108 GR  |   2 suma1              0104 GR
+  2 suma2              0106 GR  |   2 sumando1           0100 GR
+  2 sumando2           0102 GR  |     teclado        =   FF02 G
+
+ASxxxx Assembler V05.00  (Motorola 6809), page 3.
+Hexidecimal [16-Bits]
+
+Area Table
+
+[_CSEG]
+   0 _CODE            size    0   flags C080
+   2 PROG             size  123   flags  908
+[_DSEG]
+   1 _DATA            size    0   flags C0C0
+

@@ -1,0 +1,44 @@
+ASxxxx Linker V05.00,  page 1.
+Hexidecimal  [16-Bits]
+
+Area                       Addr        Size        Decimal Bytes (Attributes)
+--------------------       ----        ----        ------- ----- ------------
+.  .ABS.                   0000        0000 =           0. bytes (ABS,OVR,CSEG)
+
+         Value  Global                             Global Defined In Module
+         -----  --------------------------------   ------------------------
+          0000  l_PROG                          
+          0000  l__DATA                         
+          0000  l__CODE                         
+          0000  s_PROG                          
+          0000  s__DATA                         
+          0000  s__CODE                         
+          0000  .__.ABS.                           
+          FF00  pantalla                           
+          FF01  fin                                
+          FF02  teclado                            
+
+ASxxxx Linker V05.00,  page 2.
+Hexidecimal  [16-Bits]
+
+Area                       Addr        Size        Decimal Bytes (Attributes)
+--------------------       ----        ----        ------- ----- ------------
+PROG                       0000        0000 =           0. bytes (ABS,OVR,CSEG)
+
+         Value  Global                             Global Defined In Module
+         -----  --------------------------------   ------------------------
+          0100  uno                                
+          0102  dos                                
+          0103  suma1                              
+          0105  suma2                              
+          0107  programa                           
+          011B  acabar                             
+
+ASxxxx Linker V05.00,  page 3.
+
+Files Linked                              [ module(s) ]
+
+ejer2.rel                                 [  ]
+
+
+

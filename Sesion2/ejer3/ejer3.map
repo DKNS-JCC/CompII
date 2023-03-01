@@ -1,0 +1,48 @@
+ASxxxx Linker V05.00,  page 1.
+Hexidecimal  [16-Bits]
+
+Area                       Addr        Size        Decimal Bytes (Attributes)
+--------------------       ----        ----        ------- ----- ------------
+.  .ABS.                   0000        0000 =           0. bytes (ABS,OVR,CSEG)
+
+         Value  Global                             Global Defined In Module
+         -----  --------------------------------   ------------------------
+          0000  l_PROG                          
+          0000  l__DATA                         
+          0000  l__CODE                         
+          0000  s_PROG                          
+          0000  s__DATA                         
+          0000  s__CODE                         
+          0000  .__.ABS.                           
+          FF00  pantalla                           
+          FF01  fin                                
+          FF02  teclado                            
+
+ASxxxx Linker V05.00,  page 2.
+Hexidecimal  [16-Bits]
+
+Area                       Addr        Size        Decimal Bytes (Attributes)
+--------------------       ----        ----        ------- ----- ------------
+PROG                       0000        0000 =           0. bytes (ABS,OVR,CSEG)
+
+         Value  Global                             Global Defined In Module
+         -----  --------------------------------   ------------------------
+          0100  uno                                
+          0102  dos                                
+          0104  prod1                              
+          0106  prod2                              
+          0108  prod3                              
+          010A  prod4                              
+          010C  resultado2                         
+          010E  resultado1                         
+          0110  programa                           
+          0163  acabar                             
+
+ASxxxx Linker V05.00,  page 3.
+
+Files Linked                              [ module(s) ]
+
+ejer3.rel                                 [  ]
+
+
+
