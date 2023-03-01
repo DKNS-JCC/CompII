@@ -1,6 +1,7 @@
 .area PROG (ABS)
 
-         			
+
+     			
 fin     	.equ 	0xFF01
 teclado		.equ	0xFF02
 pantalla 	.equ 	0xFF00
