@@ -1,0 +1,75 @@
+ASxxxx Assembler V05.00  (Motorola 6809), page 1.
+Hexidecimal [16-Bits]
+
+
+
+                              1 .area PROG (ABS)
+                              2 
+                              3          			
+                     FF01     4 fin     	.equ 	0xFF01
+                     FF02     5 teclado		.equ	0xFF02
+                     FF00     6 pantalla 	.equ 	0xFF00
+                              7          			
+   0100                       8         	.org 	0x100	
+                              9         	.globl 	programa
+                             10 
+                             11 			
+   0100 00                   12 n1:	.byte	0
+   0101 00                   13 n2:	.byte	0
+   0102 00                   14 op:	.byte	0	
+                             15 			
+   0103                      16 programa:	
+   0103 B6 FF 02      [ 5]   17 		lda teclado 	;A=3(ASCII)
+   0106 80 30         [ 2]   18 		suba #'0			;A=3(HEX)
+   0108 48            [ 2]   19 		lsla
+   0109 48            [ 2]   20 		lsla
+   010A 48            [ 2]   21 		lsla
+   010B 48            [ 2]   22 		lsla
+   010C B7 01 00      [ 5]   23 		sta n1
+   010F B6 FF 02      [ 5]   24 		lda teclado 	;A=7(ASCII)
+   0112 80 30         [ 2]   25 		suba #'0		;A=7(HEX)
+   0114 BB 01 00      [ 5]   26 		adda n1			;A=0x37
+                             27 		
+   0117 86 20         [ 2]   28 		lda #32
+   0119 B7 FF 00      [ 5]   29 		sta pantalla
+                             30 
+   011C B6 FF 02      [ 5]   31 		lda teclado 	;A=3(ASCII)
+   011F 80 30         [ 2]   32 		suba #'0		;A=3(HEX)
+   0121 48            [ 2]   33 		lsla
+   0122 48            [ 2]   34 		lsla
+   0123 48            [ 2]   35 		lsla
+   0124 48            [ 2]   36 		lsla
+   0125 B7 01 01      [ 5]   37 		sta n2
+   0128 B6 FF 02      [ 5]   38 		lda teclado 	;A=7(ASCII)
+   012B 80 30         [ 2]   39 		suba #'0		;A=7(HEX)
+   012D BB 01 01      [ 5]   40 		adda n2			;A=0x37
+                             41 
+   0130 B6 01 00      [ 5]   42 		lda n1
+   0133 BB 01 01      [ 5]   43 		adda n2
+   0136 19            [ 2]   44 		daa
+   0137 B7 01 02      [ 5]   45 		sta op
+                             46 
+                             47 		
+ASxxxx Assembler V05.00  (Motorola 6809), page 2.
+Hexidecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.       =   2710 L   |     .__.ABS.       =   0000 G
+    .__.CPU.       =   0000 L   |     .__.H$L.       =   0001 L
+    fin            =   FF01 G   |   2 n1                 0100 GR
+  2 n2                 0101 GR  |   2 op                 0102 GR
+    pantalla       =   FF00 G   |   2 programa           0103 GR
+    teclado        =   FF02 G
+
+ASxxxx Assembler V05.00  (Motorola 6809), page 3.
+Hexidecimal [16-Bits]
+
+Area Table
+
+[_CSEG]
+   0 _CODE            size    0   flags C080
+   2 PROG             size  13A   flags  908
+[_DSEG]
+   1 _DATA            size    0   flags C0C0
+
