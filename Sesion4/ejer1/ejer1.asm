@@ -2,22 +2,26 @@
 
          			; Inicio definicion de constantes
 fin     	.equ 	0xFF01
-teclado		.equ	0xFF02
+teclado	    .equ	0xFF02
 pantalla 	.equ 	0xFF00
          			; Fin definicion de constantes
         	.org 	0x100	
         	.globl 	programa
 
 			; Inicio declaración de variables
-var1:	.byte	3
-var2:	.word	12
+
 			; Fin declaración de variables
 	        	
 			; Comienzo del programa
 programa:	
-			; Instrucciones del programa
-
-			; Terminación e inicio del programa
+        lda #9
+bucle: 	
+        tfr a,b
+        addb #'0
+        stb pantalla
+        suba #1
+        bcc bucle
+			
 acabar: 	clra
 	sta 	fin
 
