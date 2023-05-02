@@ -1,0 +1,82 @@
+ASxxxx Assembler V05.00  (Motorola 6809), page 1.
+Hexidecimal [16-Bits]
+
+
+
+                              1         	.area PROG (ABS)
+                              2 
+                     FF01     3 fin     	.equ 	0xFF01
+                     FF02     4 teclado		.equ	0xFF02
+                     FF00     5 pantalla 	.equ 	0xFF00
+                              6 
+   0100                       7         	.org 	0x100	
+                              8         	.globl 	programa
+                              9 
+   0100 0A 4D 65 6E 75 20    10 menu:	.ascii	"\nMenu de opciones:\n"
+        64 65 20 6F 70 63
+        69 6F 6E 65 73 3A
+        0A
+   0113 31 2E 20 4F 70 63    11         .ascii "1. Opcion 1\n"
+        69 6F 6E 20 31 0A
+   011F 32 2E 20 4F 70 63    12         .asciz "2. Opcion 2\n"
+        69 6F 6E 20 32 0A
+        00
+   012C 00 0C                13 var2:	.word	12
+                             14 
+   012E                      15 programa:	
+                             16 
+   012E 10 CE FF 00   [ 4]   17         lds 	#0xFF00         ; Inicia la pila en 0xFF00
+   0132 8E 01 00      [ 3]   18         ldx 	#menu           ; Carga la dirección de la rutina menu
+   0135 BD 01 3B      [ 8]   19         jsr     imprime_cadena  ; llama a la subrutina imprime_cadena
+   0138 BD 01 49      [ 8]   20         jsr     acabar
+                             21 
+                             22 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             23 ; imprime_cadena                                                    ;
+                             24 ; saca por la pantalla la cadena acabada en '\0 apuntada por X      ;
+                             25 ;                                                                   ;       
+                             26 ; Entrada: X-direcciOn de comienzo de la cadena                     ;
+                             27 ; Salida: ninguna                                                   ;   
+                             28 ; Registros afectados: X, CC.                                       ;
+                             29 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             30 
+   013B                      31 imprime_cadena:
+   013B 34 02         [ 6]   32         pshs    a               ; Guarda el valor de A en la pila
+   013D                      33 sgte:              
+   013D A6 80         [ 6]   34         lda     ,x+             ; Carga el primer caracter de la cadena
+   013F 27 05         [ 3]   35         beq ret_imprime_cadena  ; Si es 0, sale a ret_imprime_cadena
+   0141 B7 FF 00      [ 5]   36         sta     pantalla        ; Si no, lo imprime en pantalla
+   0144 20 F7         [ 3]   37         bra     sgte            ; y vuelve a sgte
+   0146                      38 ret_imprime_cadena:
+   0146 35 02         [ 6]   39         puls    a               ; Recupera el valor de A
+   0148 39            [ 5]   40         rts                     ; y sale de la subrutina equivalente a puls pc (return)
+                             41 
+                             42 
+   0149 4F            [ 2]   43 acabar: 	clra
+   014A B7 FF 01      [ 5]   44 	sta 	fin
+                             45 
+   FFFE                      46 	.org 	0xFFFE	; Vector de RESET
+   FFFE 01 2E                47 	.word 	programa
+ASxxxx Assembler V05.00  (Motorola 6809), page 2.
+Hexidecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.       =   2710 L   |     .__.ABS.       =   0000 G
+    .__.CPU.       =   0000 L   |     .__.H$L.       =   0001 L
+  2 acabar             0149 R   |     fin            =   FF01 
+  2 imprime_cadena     013B R   |   2 menu               0100 R
+    pantalla       =   FF00     |   2 programa           012E GR
+  2 ret_imprime_ca     0146 R   |   2 sgte               013D R
+    teclado        =   FF02     |   2 var2               012C R
+
+ASxxxx Assembler V05.00  (Motorola 6809), page 3.
+Hexidecimal [16-Bits]
+
+Area Table
+
+[_CSEG]
+   0 _CODE            size    0   flags C080
+   2 PROG             size    0   flags  908
+[_DSEG]
+   1 _DATA            size    0   flags C0C0
+

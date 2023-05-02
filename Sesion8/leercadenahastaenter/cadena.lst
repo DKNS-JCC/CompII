@@ -1,0 +1,143 @@
+ASxxxx Assembler V05.00  (Motorola 6809), page 1.
+Hexidecimal [16-Bits]
+
+
+
+                              1         	.area PROG (ABS)
+                              2 
+                              3          			; Inicio definicion de constantes
+                     FF01     4 fin     	.equ 	0xFF01
+                     FF02     5 teclado		.equ	0xFF02
+                     FF00     6 pantalla 	.equ 	0xFF00
+                     E000     7 cadena      .equ    0xE000
+                              8          			; Fin definicion de constantes
+   0100                       9         	.org 	0x100	
+                             10         	.globl 	programa
+                             11 
+                             12 			; Inicio declaración de variables
+   0100 31 31 31 31 31 31    13 cadenaf:	.asciz	"111111111"
+        31 31 31 00
+                             14 			; Fin declaración de variables
+                             15 	        	
+                             16 			; Comienzo del programa
+   010A                      17 programa:	
+                             18 			; Instrucciones del programa
+   010A 10 CE FF 00   [ 4]   19         lds #0xFF00
+   010E 86 09         [ 2]   20         lda #9
+   0110 8E E0 00      [ 3]   21         ldx #cadena
+   0113 BD 01 20      [ 8]   22         jsr lee_cadena
+   0116 8E E0 00      [ 3]   23         ldx #cadena
+   0119 BD 01 51      [ 8]   24         jsr imprime_cadena
+                             25 			; Terminación e inicio del programa
+   011C 4F            [ 2]   26 acabar: 	clra
+   011D B7 FF 01      [ 5]   27 	sta 	fin
+                             28 
+                             29 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             30 ;lee_cadena:
+                             31 ;Lee cadena hasta que se pulsa enter
+                             32 ;Entrada X
+                             33 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             34 
+   0120                      35 lee_cadena:
+   0120 34 02         [ 6]   36     pshs a         ;Guarda el valor de A en la pila
+                             37 
+   0122                      38 lc_lectura:
+   0122 B6 FF 02      [ 5]   39     lda teclado     ;Lee el teclado
+   0125 A7 80         [ 6]   40     sta ,x+         ;Guarda el caracter en la cadena
+   0127 81 0A         [ 2]   41     cmpa #'\n       ;Compara con el caracter de fin de cadena
+   0129 26 F7         [ 3]   42     bne lc_lectura  ;Si no es el caracter de fin de cadena, vuelve a leer
+   012B 6F 82         [ 8]   43     clr ,-x         ;Si es el caracter de fin de cadena, lo sustituye por 0
+   012D 35 02         [ 6]   44     puls a          ;Recupera el valor de A
+   012F 39            [ 5]   45     rts             ;Sale de la subrutina equivalente a puls pc (return)
+                             46 
+                             47 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             48 ;lee_cadena_n
+                             49 ;Entrada X (inicio) A (tamaño)
+                             50 ;reg_afectados  A, X, B, CC
+                             51 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             52 
+   0130 00                   53 lcn_max: .byte 0         ;Variable para guardar el tamaño de la cadena
+                             54 
+ASxxxx Assembler V05.00  (Motorola 6809), page 2.
+Hexidecimal [16-Bits]
+
+
+
+   0131                      55 lee_cadena_n:
+   0131 4D            [ 2]   56     tsta                ;Comprueba si el tamaño es 0
+   0132 27 1A         [ 3]   57     beq lcn_retorno     ;Si es 0, sale de la subrutina
+   0134 4A            [ 2]   58     deca                ;Decrementa el tamaño de a en 1 (descarta el final de cadena)
+   0135 B7 01 30      [ 5]   59     sta lcn_max         ;Guarda el tamaño en la variable lcn_max
+   0138 4F            [ 2]   60     clra
+                             61 
+   0139                      62 lcn_lectura:
+   0139 B1 01 30      [ 5]   63     cmpa lcn_max            ;Compara el tamaño con el tamaño de la cadena
+   013C 24 0C         [ 3]   64     bhs  lcn_fin_lectura_n  ;Si el tamaño es mayor o igual que el tamaño de la cadena, sale de la subrutina
+   013E F6 FF 02      [ 5]   65     ldb  teclado            ;Lee el teclado
+   0141 E7 80         [ 6]   66     stb ,x+                 ;Guarda el caracter en la cadena
+   0143 C1 0A         [ 2]   67     cmpb #'\n               ;Compara con el caracter de fin de cadena
+   0145 27 03         [ 3]   68     beq lcn_fin_lectura_n   ;Si es el caracter de fin de cadena, sale de la subrutina
+   0147 4C            [ 2]   69     inca                    ;Incrementa el tamaño de a en 1
+   0148 20 EF         [ 3]   70     bra lcn_lectura         ;Vuelve a leer
+                             71 
+   014A                      72 lcn_fin_lectura_n:
+   014A 6F 82         [ 8]   73     clr ,-x                 ;Si es el caracter de fin de cadena, lo sustituye por 0
+   014C 20 00         [ 3]   74     bra lcn_retorno         ;Sale de la subrutina
+                             75 
+   014E                      76 lcn_retorno:
+   014E 35 04         [ 6]   77     puls b                   ;Recupera el valor de A
+   0150 39            [ 5]   78     rts                     ;Sale de la subrutina equivalente a puls pc (return)
+                             79 
+                             80 
+                             81 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             82 ; imprime_cadena                                                   ;
+                             83 ; saca por la pantalla la cadena acabada en '\0 apuntada por X     ;
+                             84 ;                                                                  ;       
+                             85 ; Entrada: X-direcciOn de comienzo de la cadena                    ;
+                             86 ; Salida: ninguna                                                  ;   
+                             87 ; Registros afectados: X, CC.                                      ;
+                             88 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             89 
+   0151                      90 imprime_cadena:
+   0151 34 02         [ 6]   91         pshs    a               ; Guarda el valor de A en la pila
+   0153                      92 sgte:              
+   0153 A6 80         [ 6]   93         lda     ,x+             ; Carga el primer caracter de la cadena
+   0155 27 05         [ 3]   94         beq ret_imprime_cadena  ; Si es 0, sale a ret_imprime_cadena
+   0157 B7 FF 00      [ 5]   95         sta     pantalla        ; Si no, lo imprime en pantalla
+   015A 20 F7         [ 3]   96         bra     sgte            ; y vuelve a sgte
+   015C                      97 ret_imprime_cadena:
+   015C 35 02         [ 6]   98         puls    a               ; Recupera el valor de A
+   015E 39            [ 5]   99         rts                     ; y sale de la subrutina equivalente a puls pc (return)
+                            100 
+                            101 
+                            102 
+   FFFE                     103 	.org 	0xFFFE	; Vector de RESET
+   FFFE 01 0A               104 	.word 	programa
+ASxxxx Assembler V05.00  (Motorola 6809), page 3.
+Hexidecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.       =   2710 L   |     .__.ABS.       =   0000 G
+    .__.CPU.       =   0000 L   |     .__.H$L.       =   0001 L
+  2 acabar             011C R   |     cadena         =   E000 
+  2 cadenaf            0100 R   |     fin            =   FF01 
+  2 imprime_cadena     0151 R   |   2 lc_lectura         0122 R
+  2 lcn_fin_lectur     014A R   |   2 lcn_lectura        0139 R
+  2 lcn_max            0130 R   |   2 lcn_retorno        014E R
+  2 lee_cadena         0120 R   |   2 lee_cadena_n       0131 R
+    pantalla       =   FF00     |   2 programa           010A GR
+  2 ret_imprime_ca     015C R   |   2 sgte               0153 R
+    teclado        =   FF02 
+
+ASxxxx Assembler V05.00  (Motorola 6809), page 4.
+Hexidecimal [16-Bits]
+
+Area Table
+
+[_CSEG]
+   0 _CODE            size    0   flags C080
+   2 PROG             size    0   flags  908
+[_DSEG]
+   1 _DATA            size    0   flags C0C0
+

@@ -1,0 +1,85 @@
+ASxxxx Assembler V05.00  (Motorola 6809), page 1.
+Hexidecimal [16-Bits]
+
+
+
+                              1 ;COMPARAR DOS LISTAS DE NUMEROS/CARACTERES DEVOLVIENDO UN 1 SI SON IGUALES
+                              2 ;O UN 0 SI SON DISTINTAS
+                              3 
+                              4 
+                              5 
+                              6         	.area PROG (ABS)
+                              7 
+                              8          			; Inicio definicion de constantes
+                     FF01     9 fin     	.equ 	0xFF01
+                     FF02    10 teclado		.equ	0xFF02
+                     FF00    11 pantalla 	.equ 	0xFF00
+                             12          			; Fin definicion de constantes
+   0100                      13         	.org 	0x100	
+                             14         	.globl 	programa
+                             15 
+                             16 			; Inicio declaración de variables
+   0100 31 32 33 34 35 00    17 var1:	.asciz	"12345"
+   0106 30 32 33 34 35 00    18 var2:	.asciz	"02345"
+                             19 
+   010C                      20 programa:	
+                             21 
+   010C 86 02         [ 2]   22 	lda #2
+                             23 
+   010E                      24 compara:
+                             25 
+   010E 8E 01 00      [ 3]   26 	ldx #var1
+   0111 30 86         [ 5]   27 	leax a,x
+   0113 10 8E 01 06   [ 4]   28 	ldy #var2
+                             29 
+   0117                      30 compara_bucle:
+                             31 
+   0117 A6 80         [ 6]   32 	lda 	,x+
+   0119 27 08         [ 3]   33 	beq 	compara_igual
+   011B A1 A0         [ 6]   34 	cmpa 	,y+
+   011D 27 F8         [ 3]   35 	beq 	compara_bucle
+                             36 
+   011F                      37 compara_distinto:
+                             38 
+   011F C6 00         [ 2]   39 	ldb 	#0			
+   0121 20 02         [ 3]   40 	bra 	compara_fin
+                             41 
+   0123                      42 compara_igual:
+                             43 
+   0123 C6 01         [ 2]   44 	ldb #1
+                             45 
+   0125                      46 compara_fin:
+                             47 
+   0125 CB 30         [ 2]   48 	addb #'0
+   0127 F7 FF 00      [ 5]   49 	stb pantalla
+                             50 
+   012A 4F            [ 2]   51 acabar: 	clra
+   012B B7 FF 01      [ 5]   52 	sta 	fin
+                             53 
+   FFFE                      54 	.org 	0xFFFE	; Vector de RESET
+   FFFE 01 0C                55 	.word 	programa
+ASxxxx Assembler V05.00  (Motorola 6809), page 2.
+Hexidecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.       =   2710 L   |     .__.ABS.       =   0000 G
+    .__.CPU.       =   0000 L   |     .__.H$L.       =   0001 L
+  2 acabar             012A R   |   2 compara            010E R
+  2 compara_bucle      0117 R   |   2 compara_distin     011F R
+  2 compara_fin        0125 R   |   2 compara_igual      0123 R
+    fin            =   FF01     |     pantalla       =   FF00 
+  2 programa           010C GR  |     teclado        =   FF02 
+  2 var1               0100 R   |   2 var2               0106 R
+
+ASxxxx Assembler V05.00  (Motorola 6809), page 3.
+Hexidecimal [16-Bits]
+
+Area Table
+
+[_CSEG]
+   0 _CODE            size    0   flags C080
+   2 PROG             size    0   flags  908
+[_DSEG]
+   1 _DATA            size    0   flags C0C0
+

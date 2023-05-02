@@ -1,0 +1,115 @@
+ASxxxx Assembler V05.00  (Motorola 6809), page 1.
+Hexidecimal [16-Bits]
+
+
+
+                              1 	.area PROG (ABS)
+                              2 
+                              3         ; definimos un par de constantes
+                     FF01     4 fin     .equ 0xFF01
+                     FF00     5 pantalla .equ 0xFF00
+                              6 
+   0100                       7 	.org 0x100
+                              8 	.globl programa
+                              9 
+   0100 30 78 00             10 prefijo:.asciz "0x" ; prefijo
+                             11 
+   0103                      12 programa:
+   0103 10 CE F0 00   [ 4]   13         lds #0xF000 ; usaremos la pila.  Le damos un valor seguro
+   0107 86 1C         [ 2]   14 	lda #28 ; pongamos este nUmero como prueba
+                             15 
+                             16         ; imprimamos 0x
+   0109 8E 01 00      [ 3]   17         ldx #prefijo
+   010C 8D 26         [ 7]   18         bsr imprime_cadena
+                             19 
+                             20         ; primero imprimamos la primera cifra hexadecimal
+   010E 4D            [ 2]   21         tsta
+   010F 27 08         [ 3]   22         beq segunda_cifra
+   0111 1F 89         [ 6]   23         tfr a,b
+   0113 54            [ 2]   24         lsrb
+   0114 54            [ 2]   25         lsrb
+   0115 54            [ 2]   26         lsrb
+   0116 54            [ 2]   27         lsrb ; en B estA la primera cifra, de 0 a 15
+   0117 8D 0F         [ 7]   28         bsr imprime_cifra_hexa
+                             29 
+                             30         ; ahora imprimimos la segunda cifra hexadecimal
+   0119                      31 segunda_cifra:
+   0119 1F 89         [ 6]   32         tfr a,b
+   011B C4 0F         [ 2]   33         andb #0b1111 ; en B estA la segunda cifra, de 0 a 15
+   011D 8D 09         [ 7]   34         bsr imprime_cifra_hexa
+                             35 
+                             36         ; imprimamos un salto de lInea al final
+   011F C6 0A         [ 2]   37         ldb #'\n
+   0121 F7 FF 00      [ 5]   38         stb pantalla
+                             39 
+                             40         ; el programa acaba
+   0124 4F            [ 2]   41         clra
+   0125 B7 FF 01      [ 5]   42 	sta fin
+                             43 
+                             44 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             45 ; imprime_cifra_hexa                                               ;
+                             46 ;     saca por la pantalla la cifra hexadecimal contenida en B     ;
+                             47 ;                                                                  ;
+                             48 ;   Entrada: B-cifra hexadecimal, del 0 al 15                      ;
+                             49 ;   Salida:  ninguna                                               ;
+                             50 ;   Registros afectados: B, CC.                                    ;
+                             51 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             52 
+   0128                      53 imprime_cifra_hexa:
+   0128 C1 0A         [ 2]   54         cmpb #10
+   012A 25 02         [ 3]   55         blo decimal
+ASxxxx Assembler V05.00  (Motorola 6809), page 2.
+Hexidecimal [16-Bits]
+
+
+
+   012C CB 07         [ 2]   56         addb #'A-'9-1
+   012E CB 30         [ 2]   57 decimal:addb #'0
+   0130 F7 FF 00      [ 5]   58         stb pantalla
+   0133 39            [ 5]   59         rts
+                             60 
+                             61 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             62 ; imprime_cadena                                                   ;
+                             63 ;     saca por la pantalla la cadena acabada en '\0 apuntada por X ;
+                             64 ;                                                                  ;
+                             65 ;   Entrada: X-direcciOn de comienzo de la cadena                  ;
+                             66 ;   Salida:  ninguna                                               ;
+                             67 ;   Registros afectados: X, CC.                                    ;
+                             68 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             69  
+   0134                      70 imprime_cadena:
+   0134 34 02         [ 6]   71         pshs a
+   0136 A6 80         [ 6]   72 sgte:   lda ,x+
+   0138 27 05         [ 3]   73         beq ret_imprime_cadena
+   013A B7 FF 00      [ 5]   74         sta pantalla
+   013D 20 F7         [ 3]   75         bra sgte
+   013F                      76 ret_imprime_cadena:
+   013F 35 02         [ 6]   77         puls a
+   0141 39            [ 5]   78         rts
+                             79 
+   FFFE                      80 	.org 0xFFFE	; vector de RESET
+   FFFE 01 03                81 	.word programa
+ASxxxx Assembler V05.00  (Motorola 6809), page 3.
+Hexidecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.       =   2710 L   |     .__.ABS.       =   0000 G
+    .__.CPU.       =   0000 L   |     .__.H$L.       =   0001 L
+  2 decimal            012E R   |     fin            =   FF01 
+  2 imprime_cadena     0134 R   |   2 imprime_cifra_     0128 R
+    pantalla       =   FF00     |   2 prefijo            0100 R
+  2 programa           0103 GR  |   2 ret_imprime_ca     013F R
+  2 segunda_cifra      0119 R   |   2 sgte               0136 R
+
+ASxxxx Assembler V05.00  (Motorola 6809), page 4.
+Hexidecimal [16-Bits]
+
+Area Table
+
+[_CSEG]
+   0 _CODE            size    0   flags C080
+   2 PROG             size    0   flags  908
+[_DSEG]
+   1 _DATA            size    0   flags C0C0
+

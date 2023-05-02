@@ -20,8 +20,8 @@ programa:
 		std		suma1
 
 		;Suma con registro A
-		lda 	sumando1+1	;90
-		adda	sumando2+1	;+77
+		lda 	sumando1+1	;90 ya que es la posicion de memoria donde esta el 90 para el tamaño del registro A
+		adda	sumando2+1	;90+77
 		sta		suma2+1		;almacenar en A
 		lda		sumando1	;21
 		adca 	sumando2	;+77

@@ -1,0 +1,140 @@
+ASxxxx Assembler V05.00  (Motorola 6809), page 1.
+Hexidecimal [16-Bits]
+
+
+
+                              1         	.area PROG (ABS)
+                              2 
+                              3          			; Inicio definicion de constantes
+                     FF01     4 fin     	.equ 	0xFF01
+                     FF02     5 teclado		.equ	0xFF02
+                     FF00     6 pantalla 	.equ 	0xFF00
+                     0FF0     7 pilaS       .equ    0xFF0
+                              8          			; Fin definicion de constantes
+   0100                       9         	.org 	0x100	
+                             10         	.globl 	programa
+                             11 
+                             12 
+   0100                      13 programa:	
+   0100 10 CE 0F F0   [ 4]   14     lds #pilaS
+   0104 CC 5B AC      [ 3]   15     ldd #23468
+   0107 BD 01 13      [ 8]   16     jsr imprime_decimal
+                             17 
+   010A 86 0A         [ 2]   18     lda #'\n
+   010C B7 FF 00      [ 5]   19     sta pantalla
+                             20 
+   010F 4F            [ 2]   21 acabar: 	clra
+   0110 B7 FF 01      [ 5]   22 	sta 	fin
+                             23 
+                             24 
+                             25 
+                             26 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             27 ;imprime_decimal
+                             28 ;ENTRADA: D
+                             29 ;Registros Afectados: D,X,CC
+                             30 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                             31 
+   0113                      32 imprime_decimal:
+   0113 34 10         [ 6]   33     pshs x
+   0115 8E 00 00      [ 3]   34     ldx    #0                       ;inicializa el contador a 0
+   0118                      35 id_primera_cifra:
+   0118 10 83 27 10   [ 5]   36     cmpd #10000                     ;compara el valor de D con 10000
+   011C 25 0A         [ 3]   37     blo  id_imprime_primera_cifra   ;si D es menor que 10000, imprime la primera cifra
+   011E 83 27 10      [ 4]   38     subd #10000                     ;si no, resta 10000 a D
+   0121 1E 01         [ 8]   39     exg  d,x                        ;intercambia el valor de D con el valor de X
+   0123 5C            [ 2]   40     incb                            ;incrementa el valor de B
+   0124 1E 01         [ 8]   41     exg  d,x                        ;intercambia el valor de D con el valor de X
+   0126 20 F0         [ 3]   42     bra  id_primera_cifra           ;vuelve a la etiqueta id_primera_cifra
+                             43 
+   0128                      44 id_imprime_primera_cifra:
+   0128 1E 10         [ 8]   45     exg  x,d                        ;intercambia el valor de X con el valor de D
+   012A CB 30         [ 2]   46     addb #'0                        ;suma 0 a B
+   012C F7 FF 00      [ 5]   47     stb  pantalla                   ;imprime el valor de B en pantalla
+   012F 1E 10         [ 8]   48     exg  x,d                        ;intercambia el valor de X con el valor de D
+   0131 8E 00 00      [ 3]   49     ldx  #0  
+   0134                      50 id_segunda_cifra:
+   0134 10 83 03 E8   [ 5]   51     cmpd #1000                      ;compara el valor de D con 1000
+   0138 25 0A         [ 3]   52     blo  id_imprime_segunda_cifra   ;si D es menor que 1000, imprime la primera cifra
+   013A 83 03 E8      [ 4]   53     subd #1000                      ;si no, resta 1000 a D
+   013D 1E 01         [ 8]   54     exg  d,x                        ;intercambia el valor de D con el valor de X
+   013F 5C            [ 2]   55     incb                            ;incrementa el valor de B
+ASxxxx Assembler V05.00  (Motorola 6809), page 2.
+Hexidecimal [16-Bits]
+
+
+
+   0140 1E 01         [ 8]   56     exg  d,x                        ;intercambia el valor de D con el valor de X
+   0142 20 F0         [ 3]   57     bra  id_segunda_cifra           ;vuelve a la etiqueta id_segunda_cifra
+                             58 
+   0144                      59 id_imprime_segunda_cifra:
+   0144 1E 10         [ 8]   60     exg  x,d                        ;intercambia el valor de X con el valor de D
+   0146 CB 30         [ 2]   61     addb #'0                        ;suma 0 a B
+   0148 F7 FF 00      [ 5]   62     stb  pantalla                   ;imprime el valor de B en pantalla
+   014B 1E 10         [ 8]   63     exg  x,d                        ;intercambia el valor de X con el valor de D
+   014D 8E 00 00      [ 3]   64     ldx  #0  
+   0150                      65 id_tercera_cifra:
+   0150 10 83 00 64   [ 5]   66     cmpd #100                       ;compara el valor de D con 100
+   0154 25 0A         [ 3]   67     blo  id_imprime_tercera_cifra   ;si D es menor que 100, imprime la primera cifra
+   0156 83 00 64      [ 4]   68     subd #100                       ;si no, resta 100 a D
+   0159 1E 01         [ 8]   69     exg  d,x                        ;intercambia el valor de D con el valor de X
+   015B 5C            [ 2]   70     incb                            ;incrementa el valor de B
+   015C 1E 01         [ 8]   71     exg  d,x                        ;intercambia el valor de D con el valor de X
+   015E 20 F0         [ 3]   72     bra  id_tercera_cifra           ;vuelve a la etiqueta id_tercera_cifra
+                             73 
+   0160                      74 id_imprime_tercera_cifra:
+   0160 1E 10         [ 8]   75     exg  x,d                        ;intercambia el valor de X con el valor de D
+   0162 CB 30         [ 2]   76     addb #'0                        ;suma 0 a B
+   0164 F7 FF 00      [ 5]   77     stb  pantalla                   ;imprime el valor de B en pantalla
+   0167 1E 10         [ 8]   78     exg  x,d                        ;intercambia el valor de X con el valor de D
+   0169 8E 00 00      [ 3]   79     ldx  #0  
+   016C                      80 id_cuarta_cifra:
+   016C 10 83 00 0A   [ 5]   81     cmpd #10                        ;compara el valor de D con 10
+   0170 25 0A         [ 3]   82     blo  id_imprime_cuarta_cifra    ;si D es menor que 10, imprime la primera cifra
+   0172 83 00 0A      [ 4]   83     subd #10                        ;si no, resta 10 a D
+   0175 1E 01         [ 8]   84     exg  d,x                        ;intercambia el valor de D con el valor de X
+   0177 5C            [ 2]   85     incb                            ;incrementa el valor de B
+   0178 1E 01         [ 8]   86     exg  d,x                        ;intercambia el valor de D con el valor de X
+   017A 20 F0         [ 3]   87     bra  id_cuarta_cifra            ;vuelve a la etiqueta id_cuarta_cifra
+                             88 
+   017C                      89 id_imprime_cuarta_cifra:
+   017C 1E 10         [ 8]   90     exg  x,d                        ;intercambia el valor de X con el valor de D
+   017E CB 30         [ 2]   91     addb #'0                        ;suma 0 a B
+   0180 F7 FF 00      [ 5]   92     stb  pantalla                   ;imprime el valor de B en pantalla
+   0183 1E 10         [ 8]   93     exg  x,d                        ;intercambia el valor de X con el valor de D
+   0185 8E 00 00      [ 3]   94     ldx  #0  
+   0188                      95 id_quinta_cifra:
+   0188 CB 30         [ 2]   96     addb #'0                        ;suma 0 a B
+   018A F7 FF 00      [ 5]   97     stb  pantalla                   ;imprime el valor de B en pantalla
+   018D 35 10         [ 6]   98     puls x
+   018F 39            [ 5]   99     rts
+                            100 
+   FFFE                     101 	.org 	0xFFFE	; Vector de RESET siempre al final
+   FFFE 01 00               102 	.word 	programa
+                            103 
+ASxxxx Assembler V05.00  (Motorola 6809), page 3.
+Hexidecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.       =   2710 L   |     .__.ABS.       =   0000 G
+    .__.CPU.       =   0000 L   |     .__.H$L.       =   0001 L
+  2 acabar             010F R   |     fin            =   FF01 
+  2 id_cuarta_cifr     016C R   |   2 id_imprime_cua     017C R
+  2 id_imprime_pri     0128 R   |   2 id_imprime_seg     0144 R
+  2 id_imprime_ter     0160 R   |   2 id_primera_cif     0118 R
+  2 id_quinta_cifr     0188 R   |   2 id_segunda_cif     0134 R
+  2 id_tercera_cif     0150 R   |   2 imprime_decima     0113 R
+    pantalla       =   FF00     |     pilaS          =   0FF0 
+  2 programa           0100 GR  |     teclado        =   FF02 
+
+ASxxxx Assembler V05.00  (Motorola 6809), page 4.
+Hexidecimal [16-Bits]
+
+Area Table
+
+[_CSEG]
+   0 _CODE            size    0   flags C080
+   2 PROG             size    0   flags  908
+[_DSEG]
+   1 _DATA            size    0   flags C0C0
+

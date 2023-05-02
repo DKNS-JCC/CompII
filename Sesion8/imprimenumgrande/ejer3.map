@@ -1,0 +1,50 @@
+ASxxxx Linker V05.00,  page 1.
+Hexidecimal  [16-Bits]
+
+Area                       Addr        Size        Decimal Bytes (Attributes)
+--------------------       ----        ----        ------- ----- ------------
+.  .ABS.                   0000        0000 =           0. bytes (ABS,OVR,CSEG)
+
+         Value  Global                             Global Defined In Module
+         -----  --------------------------------   ------------------------
+          0000  l_PROG                          
+          0000  l__DATA                         
+          0000  l__CODE                         
+          0000  s_PROG                          
+          0000  s__DATA                         
+          0000  s__CODE                         
+          0000  .__.ABS.                           
+          0FF0  pilaS                              
+          FF00  pantalla                           
+          FF01  fin                                
+          FF02  teclado                            
+
+ASxxxx Linker V05.00,  page 2.
+Hexidecimal  [16-Bits]
+
+Area                       Addr        Size        Decimal Bytes (Attributes)
+--------------------       ----        ----        ------- ----- ------------
+PROG                       0000        0000 =           0. bytes (ABS,OVR,CSEG)
+
+         Value  Global                             Global Defined In Module
+         -----  --------------------------------   ------------------------
+          0100  programa                           
+          010F  acabar                             
+          0113  imprime_decimal                    
+          0116  id_primera_cifra                   
+          0126  id_imprime_primera_cifra           
+          0132  id_segunda_cifra                   
+          0142  id_imprime_segunda_cifra           
+          014E  id_tercera_cifra                   
+          015E  id_imprime_tercera_cifra           
+          016A  id_cuarta_cifra                    
+          017A  id_imprime_cuarta_cifra            
+          0186  id_quinta_cifra                    
+ASxxxx Linker V05.00,  page 3.
+
+Files Linked                              [ module(s) ]
+
+ejer3.rel                                 [  ]
+
+
+

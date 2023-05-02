@@ -1,0 +1,115 @@
+ASxxxx Assembler V05.00  (Motorola 6809), page 1.
+Hexidecimal [16-Bits]
+
+
+
+                              1         	.area PROG (ABS)
+                              2 
+                              3          			; Inicio definicion de constantes
+                     FF01     4 fin     	.equ 	0xFF01
+                     FF02     5 teclado		.equ	0xFF02
+                     FF00     6 pantalla 	.equ 	0xFF00
+                              7          			; Fin definicion de constantes
+   0100                       8         	.org 	0x100	
+                              9         	.globl 	programa
+                             10 
+                             11 			; Inicio declaración de variables
+   0100 00 00                12 num:	.word	0
+                             13 			; Fin declaración de variables
+                             14 	        	
+                             15 			; Comienzo del programa
+   0102                      16 programa:	
+                             17 			; Instrucciones del programa
+   0102 B6 FF 02      [ 5]   18     lda teclado
+   0105 80 30         [ 2]   19     suba #'0
+   0107 C6 32         [ 2]   20     ldb #50
+   0109 3D            [11]   21     mul
+   010A 86 C8         [ 2]   22     lda #200
+   010C 3D            [11]   23     mul
+   010D FD 01 00      [ 6]   24     std num
+                             25     
+   0110 B6 FF 02      [ 5]   26     lda teclado
+   0113 80 30         [ 2]   27     suba #'0
+   0115 C6 14         [ 2]   28     ldb #20
+   0117 3D            [11]   29     mul
+   0118 86 32         [ 2]   30     lda #50
+   011A 3D            [11]   31     mul
+   011B F3 01 00      [ 7]   32     addd num
+   011E FD 01 00      [ 6]   33     std num
+                             34 
+   0121 B6 FF 02      [ 5]   35     lda teclado
+   0124 80 30         [ 2]   36     suba #'0
+   0126 C6 64         [ 2]   37     ldb #100
+   0128 3D            [11]   38     mul
+   0129 F3 01 00      [ 7]   39     addd num
+   012C FD 01 00      [ 6]   40     std num
+                             41 
+   012F B6 FF 02      [ 5]   42     lda teclado
+   0132 80 30         [ 2]   43     suba #'0
+   0134 C6 0A         [ 2]   44     ldb #10
+   0136 3D            [11]   45     mul
+   0137 F3 01 00      [ 7]   46     addd num
+   013A FD 01 00      [ 6]   47     std num
+                             48 
+   013D F6 FF 02      [ 5]   49     ldb teclado
+   0140 C0 30         [ 2]   50     subb #'0
+   0142 F3 01 00      [ 7]   51     addd num
+   0145 FD 01 00      [ 6]   52     std num
+                             53     
+   0148 4F            [ 2]   54     clra
+   0149 5F            [ 2]   55     clrb
+ASxxxx Assembler V05.00  (Motorola 6809), page 2.
+Hexidecimal [16-Bits]
+
+
+
+                             56 
+   014A                      57 bucle: 
+   014A 1F 01         [ 6]   58         tfr d,x
+   014C 10 B3 01 00   [ 8]   59         cmpd num
+   0150 27 08         [ 3]   60         beq perfecto
+   0152 22 0D         [ 3]   61         bhi noperfecto
+   0154 1F 10         [ 6]   62         tfr x,d
+   0156 4C            [ 2]   63         inca
+   0157 5C            [ 2]   64         incb
+   0158 20 F0         [ 3]   65         bra bucle
+                             66 
+   015A                      67 perfecto:
+   015A 86 35         [ 2]   68         lda #'5
+   015C B7 FF 00      [ 5]   69         sta pantalla
+   015F 20 05         [ 3]   70         bra acabar
+                             71 
+   0161                      72 noperfecto: 
+   0161 86 4E         [ 2]   73         lda #'N
+   0163 B7 FF 00      [ 5]   74         sta pantalla
+                             75 
+                             76 			; Terminación e inicio del programa
+   0166 4F            [ 2]   77 acabar: 	clra
+   0167 B7 FF 01      [ 5]   78 	sta 	fin
+                             79 
+   FFFE                      80 	.org 	0xFFFE	; Vector de RESET
+   FFFE 01 02                81 	.word 	programa
+ASxxxx Assembler V05.00  (Motorola 6809), page 3.
+Hexidecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.       =   2710 L   |     .__.ABS.       =   0000 G
+    .__.CPU.       =   0000 L   |     .__.H$L.       =   0001 L
+  2 acabar             0166 GR  |   2 bucle              014A GR
+    fin            =   FF01 G   |   2 noperfecto         0161 GR
+  2 num                0100 GR  |     pantalla       =   FF00 G
+  2 perfecto           015A GR  |   2 programa           0102 GR
+    teclado        =   FF02 G
+
+ASxxxx Assembler V05.00  (Motorola 6809), page 4.
+Hexidecimal [16-Bits]
+
+Area Table
+
+[_CSEG]
+   0 _CODE            size    0   flags C080
+   2 PROG             size    0   flags  908
+[_DSEG]
+   1 _DATA            size    0   flags C0C0
+
